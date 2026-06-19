@@ -1,0 +1,679 @@
+
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>LINE 手機素材分享工具</title>
+  <style>
+    :root {
+      --bg: #f6f7f3;
+      --panel: #ffffff;
+      --text: #202523;
+      --muted: #66716c;
+      --line: #dce3df;
+      --main: #147d58;
+      --main-dark: #0f6044;
+      --warn: #9b5d12;
+      --danger: #b63d3d;
+      --soft: #eaf3ee;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .wrap {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      padding: 18px 14px 56px;
+    }
+
+    header {
+      padding: 10px 0 16px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.15;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .notice {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px solid #ead8b9;
+      background: #fff8ea;
+      color: #684b22;
+      border-radius: 14px;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 21px;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 7px;
+      font-weight: 800;
+    }
+
+    input, textarea, button {
+      font: inherit;
+    }
+
+    input[type="text"], textarea, input[type="file"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 13px;
+      background: #fff;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--main);
+      box-shadow: 0 0 0 4px rgba(20, 125, 88, .12);
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--main-dark);
+      padding: 11px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button.primary {
+      background: var(--main);
+      color: #fff;
+      border-color: var(--main);
+    }
+
+    button.danger {
+      background: #fff4f4;
+      color: var(--danger);
+      border-color: #efcaca;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .row, .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .row {
+      margin-top: 14px;
+    }
+
+    .status {
+      min-height: 22px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .status.ok { color: var(--main-dark); }
+    .status.warn { color: var(--warn); }
+    .status.bad { color: var(--danger); }
+
+    .search {
+      margin-bottom: 12px;
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .itemTop {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .title {
+      font-size: 19px;
+      font-weight: 900;
+      word-break: break-word;
+    }
+
+    .tag {
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--main-dark);
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .msg {
+      margin: 10px 0;
+      padding: 11px;
+      border: 1px solid #e6ece8;
+      border-radius: 13px;
+      background: #fafcfb;
+      white-space: pre-wrap;
+      line-height: 1.55;
+      max-height: 160px;
+      overflow: auto;
+    }
+
+    .thumbs {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .thumb {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f5f7f6;
+    }
+
+    .thumb img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+
+    .thumb span {
+      display: block;
+      padding: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.25;
+      word-break: break-all;
+    }
+
+    .hint {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .empty {
+      padding: 22px 12px;
+      border: 1px dashed var(--line);
+      border-radius: 16px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 760px) {
+      .grid { display: block; }
+      .panel { margin-bottom: 14px; }
+      .actions button { flex: 1 1 calc(50% - 8px); }
+      .actions button.primary { flex-basis: 100%; }
+      .row button { flex: 1; }
+      input[type="text"], textarea, input[type="file"] { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>LINE 手機素材分享工具</h1>
+      <p class="sub">先複製文字，再用手機原生分享選單分享圖片。這版專門避開手機瀏覽器無法穩定貼上圖片的問題。</p>
+      <div class="notice" id="notice">
+        使用手機測試時，建議用 Safari 或 Chrome 開啟。圖片分享需要瀏覽器支援 Web Share API，且通常要在 HTTPS 網址上最穩。
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <h2>新增素材</h2>
+        <input id="editId" type="hidden">
+
+        <label for="title">標題</label>
+        <input id="title" type="text" placeholder="例如：付款方式">
+
+        <label for="category">分類</label>
+        <input id="category" type="text" placeholder="例如：付款、商品、售後">
+
+        <label for="message">文字內容</label>
+        <textarea id="message" placeholder="輸入要複製給客人的文字"></textarea>
+
+        <label for="files">圖片</label>
+        <input id="files" type="file" accept="image/*" multiple>
+        <p class="hint">圖片會存在這台手機的瀏覽器裡。第一版建議每組 1 到 5 張，測試 LINE 分享會比較穩。</p>
+
+        <div class="thumbs" id="pending"></div>
+
+        <div class="row">
+          <button class="primary" id="saveBtn" type="button">儲存素材</button>
+          <button id="resetBtn" type="button">清空</button>
+        </div>
+        <div class="status" id="formStatus"></div>
+      </section>
+
+      <section class="panel">
+        <h2>素材列表</h2>
+        <input class="search" id="search" type="text" placeholder="搜尋標題、分類、文字">
+        <div class="list" id="list"></div>
+        <div class="status" id="listStatus"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const STORE_KEY = "line_mobile_share_templates_v1";
+      const MAX_IMAGE_SIDE = 1600;
+      const IMAGE_QUALITY = 0.86;
+
+      let templates = [];
+      let pendingImages = [];
+
+      const $ = (id) => document.getElementById(id);
+      const els = {
+        editId: $("editId"),
+        title: $("title"),
+        category: $("category"),
+        message: $("message"),
+        files: $("files"),
+        pending: $("pending"),
+        saveBtn: $("saveBtn"),
+        resetBtn: $("resetBtn"),
+        formStatus: $("formStatus"),
+        search: $("search"),
+        list: $("list"),
+        listStatus: $("listStatus"),
+        notice: $("notice")
+      };
+
+      function uid() {
+        return "tpl_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+      }
+
+      function setStatus(el, message, type) {
+        el.textContent = message || "";
+        el.className = "status" + (type ? " " + type : "");
+      }
+
+      function escapeHtml(value) {
+        return String(value || "").replace(/[&<>"']/g, function (char) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+          }[char];
+        });
+      }
+
+      function load() {
+        try {
+          const raw = localStorage.getItem(STORE_KEY);
+          templates = raw ? JSON.parse(raw) : [];
+          if (!Array.isArray(templates)) templates = [];
+        } catch (error) {
+          templates = [];
+          setStatus(els.listStatus, "讀取資料失敗：" + error.message, "bad");
+        }
+      }
+
+      function save() {
+        localStorage.setItem(STORE_KEY, JSON.stringify(templates));
+      }
+
+      function dataUrlToBlob(dataUrl) {
+        const parts = dataUrl.split(",");
+        const meta = parts[0] || "";
+        const base64 = parts[1] || "";
+        const mime = (meta.match(/data:(.*?);base64/) || [])[1] || "image/jpeg";
+        const binary = atob(base64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i += 1) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        return new Blob([bytes], { type: mime });
+      }
+
+      function fileToDataUrl(file) {
+        return new Promise(function (resolve, reject) {
+          const reader = new FileReader();
+          reader.onload = function () { resolve(reader.result); };
+          reader.onerror = function () { reject(reader.error || new Error("讀取圖片失敗")); };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function loadImage(src) {
+        return new Promise(function (resolve, reject) {
+          const image = new Image();
+          image.onload = function () { resolve(image); };
+          image.onerror = function () { reject(new Error("圖片載入失敗")); };
+          image.src = src;
+        });
+      }
+
+      async function compressImage(file) {
+        const dataUrl = await fileToDataUrl(file);
+        const image = await loadImage(dataUrl);
+        const ratio = Math.min(1, MAX_IMAGE_SIDE / Math.max(image.width, image.height));
+        const width = Math.round(image.width * ratio);
+        const height = Math.round(image.height * ratio);
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, width, height);
+        const type = file.type === "image/png" ? "image/png" : "image/jpeg";
+        return {
+          id: uid(),
+          name: file.name || "image.jpg",
+          type: type,
+          dataUrl: canvas.toDataURL(type, IMAGE_QUALITY)
+        };
+      }
+
+      function renderPending() {
+        els.pending.innerHTML = pendingImages.map(function (image, index) {
+          return [
+            '<div class="thumb">',
+            '<img src="', image.dataUrl, '" alt="">',
+            '<span>', escapeHtml(image.name), '</span>',
+            '<button class="danger" type="button" data-remove-pending="', index, '">移除</button>',
+            '</div>'
+          ].join("");
+        }).join("");
+      }
+
+      async function addFiles(fileList) {
+        const files = Array.from(fileList || []);
+        if (!files.length) return;
+        setStatus(els.formStatus, "正在處理圖片...", "warn");
+        for (const file of files) {
+          try {
+            if (!file.type.startsWith("image/")) continue;
+            pendingImages.push(await compressImage(file));
+          } catch (error) {
+            setStatus(els.formStatus, error.message, "bad");
+          }
+        }
+        els.files.value = "";
+        renderPending();
+        setStatus(els.formStatus, "圖片已加入，記得儲存素材。", "ok");
+      }
+
+      function resetForm() {
+        els.editId.value = "";
+        els.title.value = "";
+        els.category.value = "";
+        els.message.value = "";
+        els.files.value = "";
+        pendingImages = [];
+        renderPending();
+        setStatus(els.formStatus, "");
+      }
+
+      function saveCurrent() {
+        const title = els.title.value.trim();
+        const category = els.category.value.trim();
+        const message = els.message.value.trim();
+        if (!title && !message && !pendingImages.length) {
+          setStatus(els.formStatus, "請至少輸入標題、文字或加入圖片。", "bad");
+          return;
+        }
+        const id = els.editId.value || uid();
+        const row = {
+          id: id,
+          title: title || "未命名素材",
+          category: category,
+          message: message,
+          images: pendingImages,
+          updatedAt: new Date().toISOString()
+        };
+        const index = templates.findIndex(function (item) { return item.id === id; });
+        if (index >= 0) templates[index] = row;
+        else templates.unshift(row);
+        try {
+          save();
+          resetForm();
+          renderList();
+          setStatus(els.listStatus, "素材已儲存。", "ok");
+        } catch (error) {
+          setStatus(els.formStatus, "儲存失敗，可能是圖片太多讓瀏覽器容量不足：" + error.message, "bad");
+        }
+      }
+
+      async function copyText(text) {
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text || "");
+          } else {
+            const textarea = document.createElement("textarea");
+            textarea.value = text || "";
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            document.execCommand("copy");
+            textarea.remove();
+          }
+          setStatus(els.listStatus, "文字已複製，可以切到 LINE 貼上。", "ok");
+        } catch (error) {
+          setStatus(els.listStatus, "複製失敗，請手動選取文字複製。", "bad");
+        }
+      }
+
+      function imagesToFiles(images) {
+        return (images || []).map(function (image, index) {
+          const blob = dataUrlToBlob(image.dataUrl);
+          const ext = blob.type === "image/png" ? ".png" : ".jpg";
+          const name = image.name || ("image-" + (index + 1) + ext);
+          return new File([blob], name, { type: blob.type });
+        });
+      }
+
+      async function shareImages(tpl, oneByOne) {
+        const images = tpl.images || [];
+        if (!images.length) {
+          setStatus(els.listStatus, "這組素材沒有圖片。", "warn");
+          return;
+        }
+        if (!navigator.share) {
+          setStatus(els.listStatus, "這個瀏覽器不支援圖片分享，請改用手機 Safari 或 Chrome。", "bad");
+          return;
+        }
+
+        try {
+          if (oneByOne) {
+            const image = images[0];
+            const files = imagesToFiles([image]);
+            if (navigator.canShare && !navigator.canShare({ files: files })) {
+              throw new Error("瀏覽器不允許分享圖片檔");
+            }
+            await navigator.share({ title: tpl.title, files: files });
+            setStatus(els.listStatus, "已叫出第一張圖片分享選單。其他圖片請再按逐張分享。", "ok");
+            return;
+          }
+
+          const files = imagesToFiles(images);
+          if (navigator.canShare && !navigator.canShare({ files: files })) {
+            throw new Error("這台手機不支援一次分享多張圖片");
+          }
+          await navigator.share({ title: tpl.title, files: files });
+          setStatus(els.listStatus, "已叫出圖片分享選單。", "ok");
+        } catch (error) {
+          if (error.name === "AbortError") return;
+          setStatus(els.listStatus, error.message + "。可以改按「逐張分享」。", "warn");
+        }
+      }
+
+      function editTemplate(tpl) {
+        els.editId.value = tpl.id;
+        els.title.value = tpl.title || "";
+        els.category.value = tpl.category || "";
+        els.message.value = tpl.message || "";
+        pendingImages = JSON.parse(JSON.stringify(tpl.images || []));
+        renderPending();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function deleteTemplate(id) {
+        if (!confirm("確定刪除這組素材？")) return;
+        templates = templates.filter(function (tpl) { return tpl.id !== id; });
+        save();
+        renderList();
+        setStatus(els.listStatus, "素材已刪除。", "ok");
+      }
+
+      function renderList() {
+        const q = String(els.search.value || "").trim().toLowerCase();
+        const rows = templates.filter(function (tpl) {
+          const text = [tpl.title, tpl.category, tpl.message].join(" ").toLowerCase();
+          return !q || text.includes(q);
+        });
+
+        if (!templates.length) {
+          els.list.innerHTML = '<div class="empty">還沒有素材。先新增一組付款方式或商品介紹來測試。</div>';
+          return;
+        }
+
+        if (!rows.length) {
+          els.list.innerHTML = '<div class="empty">找不到符合的素材。</div>';
+          return;
+        }
+
+        els.list.innerHTML = rows.map(function (tpl) {
+          const images = tpl.images || [];
+          return [
+            '<article class="item">',
+            '<div class="itemTop">',
+            '<div class="title">', escapeHtml(tpl.title), '</div>',
+            tpl.category ? '<div class="tag">' + escapeHtml(tpl.category) + '</div>' : '',
+            '</div>',
+            tpl.message ? '<div class="msg">' + escapeHtml(tpl.message) + '</div>' : '<p class="hint">沒有文字內容</p>',
+            images.length ? '<div class="thumbs">' + images.map(function (image) {
+              return '<div class="thumb"><img src="' + image.dataUrl + '" alt=""><span>' + escapeHtml(image.name) + '</span></div>';
+            }).join("") + '</div>' : '',
+            '<p class="hint">圖片：', images.length, ' 張</p>',
+            '<div class="actions">',
+            '<button class="primary" type="button" data-copy="', tpl.id, '">複製文字</button>',
+            '<button type="button" data-share="', tpl.id, '">分享全部圖片</button>',
+            '<button type="button" data-share-one="', tpl.id, '">逐張分享</button>',
+            '<button type="button" data-edit="', tpl.id, '">編輯</button>',
+            '<button class="danger" type="button" data-delete="', tpl.id, '">刪除</button>',
+            '</div>',
+            '</article>'
+          ].join("");
+        }).join("");
+      }
+
+      function wireEvents() {
+        els.files.addEventListener("change", function (event) {
+          addFiles(event.target.files);
+        });
+
+        els.pending.addEventListener("click", function (event) {
+          const button = event.target.closest("[data-remove-pending]");
+          if (!button) return;
+          pendingImages.splice(Number(button.dataset.removePending), 1);
+          renderPending();
+        });
+
+        els.saveBtn.addEventListener("click", saveCurrent);
+        els.resetBtn.addEventListener("click", resetForm);
+        els.search.addEventListener("input", renderList);
+
+        els.list.addEventListener("click", async function (event) {
+          const button = event.target.closest("button[data-copy], button[data-share], button[data-share-one], button[data-edit], button[data-delete]");
+          if (!button) return;
+          const id = button.dataset.copy || button.dataset.share || button.dataset.shareOne || button.dataset.edit || button.dataset.delete;
+          const tpl = templates.find(function (item) { return item.id === id; });
+          if (!tpl) return;
+
+          if (button.dataset.copy) await copyText(tpl.message || "");
+          if (button.dataset.share) await shareImages(tpl, false);
+          if (button.dataset.shareOne) await shareImages(tpl, true);
+          if (button.dataset.edit) editTemplate(tpl);
+          if (button.dataset.delete) deleteTemplate(tpl.id);
+        });
+      }
+
+      function boot() {
+        if (!("share" in navigator)) {
+          els.notice.textContent = "這個瀏覽器目前不支援原生分享圖片。手機測試請用 Safari 或 Chrome，並盡量從 HTTPS 網址開啟。";
+        }
+        load();
+        wireEvents();
+        renderList();
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", boot, { once: true });
+      } else {
+        boot();
+      }
+    })();
+  </script>
+</body>
+</html>
